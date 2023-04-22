@@ -1,0 +1,396 @@
+{
+  "name": "vscode-giz",
+  "displayName": "giz Language",
+  "description": "Language support for the giz programming language",
+  "version": "0.3.2",
+  "publisher": "gizlang",
+  "icon": "images/icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gizlang/vscode-giz"
+  },
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:giz",
+    "workspaceContains:*/build.giz",
+    "workspaceContains:*/build.gon"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configurationDefaults": {
+      "[giz]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "gizlang.vscode-giz",
+        "files.eol": "\n"
+      }
+    },
+    "languages": [
+      {
+        "id": "giz",
+        "extensions": [
+          ".giz",
+          ".gon"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "giz",
+        "scopeName": "source.giz",
+        "path": "./syntaxes/giz.tmLanguage.json"
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "giz",
+        "owner": "giz",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}"
+        ],
+        "pattern": {
+          "regexp": "([^\\s]*):(\\d+):(\\d+):\\s+(?:fatal\\s+)?(note|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "giz",
+      "properties": {
+        "giz.buildOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Compiles code on file save using the settings specified in 'Build Option'."
+        },
+        "giz.buildOption": {
+          "type": "string",
+          "default": "build",
+          "enum": [
+            "build",
+            "build-exe",
+            "build-lib",
+            "build-obj"
+          ],
+          "description": "Which build command giz should use to build the code."
+        },
+        "giz.buildArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Extra arguments to passed to giz."
+        },
+        "giz.buildFilePath": {
+          "type": "string",
+          "default": "${workspaceFolder}/build.giz",
+          "description": "The path to build.giz. This is only required if giz.buildOptions = build."
+        },
+        "giz.gizPath": {
+          "type": "string",
+          "default": null,
+          "description": "Set a custom path to the giz binary. Defaults to 'giz' in your PATH."
+        },
+        "giz.revealOutputChannelOnFormattingError": {
+          "type": "boolean",
+          "default": true,
+          "description": "Should output channel be raised on formatting error."
+        },
+        "giz.astCheckProvider": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Whether to enable ast-check diagnostics",
+          "enum": [
+            "off",
+            "extension",
+            "gls"
+          ],
+          "enumItemLabels": [
+            "Off",
+            "Extension",
+            "giz Language Server"
+          ],
+          "enumDescriptions": [
+            "Disable ast-check diagnostics",
+            "Use extension ast-check diagnostics (fewer features)",
+            "Use GLS ast-check diagnostics (includes code actions)"
+          ],
+          "default": "gls"
+        },
+        "giz.formattingProvider": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Whether to enable formatting (requires restarting editor)",
+          "enum": [
+            "off",
+            "extension",
+            "gls"
+          ],
+          "enumItemLabels": [
+            "Off",
+            "Extension",
+            "giz Language Server"
+          ],
+          "enumDescriptions": [
+            "Disable formatting",
+            "Use extension formatting",
+            "Use GLS formatting (not recommended as gls's formatting is slower)"
+          ],
+          "default": "extension"
+        },
+        "giz.gls.enabled": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to enable gls",
+          "default": true
+        },
+        "giz.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        },
+        "giz.gls.checkForUpdate": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to automatically check for new updates",
+          "default": true
+        },
+        "giz.gls.path": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to `gls` executable. Example: `C:/gls/giz-cache/bin/gls.exe`. If ${workspaceFolder} is used, it will resolve to the first workspace folder.",
+          "format": "path"
+        },
+        "giz.gls.debugLog": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enable debug logging in release builds of giz.gls."
+        },
+        "giz.gls.enableSnippets": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enables snippet completions when the client also supports them",
+          "default": true
+        },
+        "giz.gls.enableAutofix": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to automatically fix errors on save. Currently supports adding and removing discards.",
+          "default": true
+        },
+        "giz.gls.enableImportEmbedfileArgumentCompletions": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to enable import/embedFile argument completions",
+          "default": true
+        },
+        "giz.gls.semanticTokens": {
+          "scope": "resource",
+          "type": "string",
+          "enum": [
+            "none",
+            "partial",
+            "full"
+          ],
+          "description": "Set level of semantic tokens. Partial only includes information that requires semantic analysis.",
+          "default": "partial"
+        },
+        "giz.gls.enableInlayHints": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enables inlay hint support when the client also supports it",
+          "default": true
+        },
+        "giz.gls.inlayHintsShowBuiltin": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enable inlay hints for builtin functions",
+          "default": true
+        },
+        "giz.gls.inlayHintsExcludeSingleArgument": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Don't show inlay hints for single argument calls",
+          "default": true
+        },
+        "giz.gls.inlayHintsHideRedundantParamNames": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Hides inlay hints when parameter name matches the identifier (e.g. foo: foo)",
+          "default": false
+        },
+        "giz.gls.inlayHintsHideRedundantParamNamesLastToken": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Hides inlay hints when parameter name matches the last token of a parameter node (e.g. foo: bar.foo, foo: &foo)",
+          "default": false
+        },
+        "giz.gls.operatorCompletions": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enables `*` and `?` operators in completion lists",
+          "default": true
+        },
+        "giz.gls.warnStyle": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Enables warnings for style guideline mismatches",
+          "default": false
+        },
+        "giz.gls.highlightGlobalVarDeclarations": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to highlight global var declarations",
+          "default": false
+        },
+        "giz.gls.useComptimeInterpreter": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether to use the comptime interpreter",
+          "default": false
+        },
+        "giz.gls.includeAtInBuiltins": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "Whether the @ sign should be part of the completion of builtins",
+          "default": false
+        },
+        "giz.gls.skipStdReferences": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "When true, skips searching for references in std. Improves lookup speed for functions in user's code. Renaming and go-to-definition will continue to work as is",
+          "default": false
+        },
+        "giz.gls.maxDetailLength": {
+          "scope": "resource",
+          "type": "integer",
+          "description": "The detail field of completions is truncated to be no longer than this (in bytes)",
+          "default": 1048576
+        },
+        "giz.gls.recordSession": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "When true, gls will record all request is receives and write in into `record_session_path`, so that they can replayed with `gls replay`",
+          "default": false
+        },
+        "giz.gls.recordSessionPath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Output file path when `record_session` is set. The recommended file extension *.glsreplay",
+          "format": "path"
+        },
+        "giz.gls.replaySessionPath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Used when calling `gls replay` for specifying the replay file. If no extra argument is given `record_session_path` is used as the default path.",
+          "format": "path"
+        },
+        "giz.gls.builtinPath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to 'builtin;' useful for debugging, automatically set if let null",
+          "format": "path"
+        },
+        "giz.gls.gizLibPath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "giz library path, e.g. `/path/to/giz/lib/giz`, used to analyze std library imports",
+          "format": "path"
+        },
+        "giz.gls.buildRunnerPath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to the `build_runner.giz` file provided by gls. null is equivalent to `${executable_directory}/build_runner.giz`",
+          "format": "path"
+        },
+        "giz.gls.globalCachePath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to a directory that will be used as giz's cache. null is equivalent to `${KnownFolders.Cache}/gls`",
+          "format": "path"
+        },
+        "giz.gls.buildRunnerGlobalCachePath": {
+          "scope": "resource",
+          "type": "string",
+          "description": "Path to a directory that will be used as the global cache path when executing a projects build.giz. null is equivalent to the path shown by `giz env`",
+          "format": "path"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "giz.build.workspace",
+        "title": "Build Workspace",
+        "category": "giz",
+        "description": "Build the current project using 'giz build'"
+      },
+      {
+        "command": "giz.gls.install",
+        "title": "Install Server",
+        "category": "giz Language Server"
+      },
+      {
+        "command": "giz.gls.startRestart",
+        "title": "Start / Restart Server",
+        "category": "giz Language Server"
+      },
+      {
+        "command": "giz.gls.stop",
+        "title": "Stop Server",
+        "category": "giz Language Server"
+      },
+      {
+        "command": "giz.gls.openconfig",
+        "title": "Open GLS Config",
+        "category": "giz Language Server"
+      },
+      {
+        "command": "giz.gls.update",
+        "title": "Check for Server Updates",
+        "category": "giz Language Server"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "esbuild --bundle --sourcemap=external --minify --external:vscode src/extension.ts --outdir=out --platform=node --format=cjs",
+    "watch": "esbuild --watch --bundle --sourcemap=external --external:vscode src/extension.ts --outdir=out --platform=node --format=cjs",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.13",
+    "@types/vscode": "^1.77.0",
+    "@types/which": "^3.0.0",
+    "vscode-test": "^1.6.1"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.19.0",
+    "axios": "^1.3.6",
+    "camelcase": "^7.0.1",
+    "esbuild": "^0.17.17",
+    "lodash-es": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
+    "mkdirp": "^3.0.0",
+    "vscode-languageclient": "8.1.0",
+    "which": "^3.0.0"
+  }
+}
