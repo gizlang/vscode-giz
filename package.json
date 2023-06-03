@@ -386,7 +386,7 @@
     "@vscode/vsce": "^2.19.0",
     "axios": "^1.4.0",
     "camelcase": "^7.0.1",
-    "esbuild": "^0.17.18",
+    "esbuild": "^0.17.19",
     "lodash-es": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "mkdirp": "^3.0.1",
