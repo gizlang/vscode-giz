@@ -384,7 +384,7 @@
   },
   "dependencies": {
     "@vscode/vsce": "^2.23.0",
-    "axios": "^1.6.4",
+    "axios": "^1.6.8",
     "camelcase": "^7.0.1",
     "esbuild": "^0.17.18",
     "lodash-es": "^4.17.21",
