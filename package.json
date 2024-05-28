@@ -383,7 +383,7 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "@vscode/vsce": "^2.23.0",
+    "@vscode/vsce": "^2.26.1",
     "axios": "^1.6.8",
     "camelcase": "^7.0.1",
     "esbuild": "^0.17.18",
