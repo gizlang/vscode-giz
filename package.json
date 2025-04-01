@@ -391,6 +391,6 @@
     "lodash.debounce": "^4.0.8",
     "mkdirp": "^3.0.1",
     "vscode-languageclient": "8.1.0",
-    "which": "^3.0.0"
+    "which": "^3.0.1"
   }
 }
